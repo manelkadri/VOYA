@@ -75,10 +75,26 @@ const columns = [
     id: 'col-journeys',
     title: 'Journeys',
     links: [
-      { id: 'f-romantic', label: 'Romantic Escapes', href: '/experiences?category=Romantic%20Escapes' },
-      { id: 'f-wellness', label: 'Wellness Retreats', href: '/experiences?category=Wellness%20%26%20Spa' },
-      { id: 'f-yacht', label: 'Private Yachts', href: '/experiences?category=Private%20Yacht%20Experiences' },
-      { id: 'f-culture', label: 'Cultural Discovery', href: '/experiences?category=Cultural%20Immersion' },
+      {
+        id: 'f-romantic',
+        label: 'Romantic Escapes',
+        href: '/experiences?category=Romantic%20Escapes',
+      },
+      {
+        id: 'f-wellness',
+        label: 'Wellness Retreats',
+        href: '/experiences?category=Wellness%20%26%20Spa',
+      },
+      {
+        id: 'f-yacht',
+        label: 'Private Yachts',
+        href: '/experiences?category=Private%20Yacht%20Experiences',
+      },
+      {
+        id: 'f-culture',
+        label: 'Cultural Discovery',
+        href: '/experiences?category=Cultural%20Immersion',
+      },
     ],
   },
   {
@@ -176,10 +192,26 @@ export default function Footer() {
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-ink-foreground/10 pt-8 text-xs text-ink-foreground/55 md:flex-row md:items-center">
           <p>© 2026 VOYA Travel Group, Inc. All rights reserved.</p>
           <ul className="flex flex-wrap gap-x-7 gap-y-2">
-            <li><Link href="/" className="hover:text-ink-foreground">Privacy Policy</Link></li>
-            <li><Link href="/" className="hover:text-ink-foreground">Terms of Service</Link></li>
-            <li><Link href="/" className="hover:text-ink-foreground">Cancellation Policy</Link></li>
-            <li><Link href="/" className="hover:text-ink-foreground">Accessibility</Link></li>
+            <li>
+              <Link href="/privacy-policy" className="hover:text-ink-foreground">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms-of-service" className="hover:text-ink-foreground">
+                Terms of Service
+              </Link>
+            </li>
+            <li>
+              <Link href="/cancellation-policy" className="hover:text-ink-foreground">
+                Cancellation Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/accessibility" className="hover:text-ink-foreground">
+                Accessibility
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
