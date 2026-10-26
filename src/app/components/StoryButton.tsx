@@ -131,8 +131,12 @@ export default function StoryButton() {
                 <video
                   ref={videoRef}
                   src="/video/Santorini.mp4"
-                  controls={videoStarted}
                   playsInline
+                  onClick={(event) => {
+                    const video = event.currentTarget;
+                    if (video.paused) video.play().catch(() => {});
+                    else video.pause();
+                  }}
                   preload="metadata"
                   aria-label="Discover Santorini — a VOYA film"
                   onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
