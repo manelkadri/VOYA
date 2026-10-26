@@ -28,7 +28,8 @@ export const metadata: Metadata = {
   description:
     'VOYA designs tailor-made luxury journeys to remarkable destinations, with a personal concierge for every traveler.',
   icons: {
-    icon: [{ url: '/favicon.ico', type: 'image/x-icon' }],
+    icon: [{ url: '/assets/images/app_logo.png', type: 'image/png' }],
+    apple: [{ url: '/assets/images/app_logo.png' }],
   },
 };
 
