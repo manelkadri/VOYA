@@ -131,13 +131,10 @@ export default function StoryButton() {
                 <video
                   ref={videoRef}
                   src="/video/Santorini.mp4"
+                  muted
+                  loop
                   playsInline
-                  onClick={(event) => {
-                    const video = event.currentTarget;
-                    if (video.paused) video.play().catch(() => {});
-                    else video.pause();
-                  }}
-                  preload="metadata"
+                  preload="auto"
                   aria-label="Discover Santorini — a VOYA film"
                   onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
                   onEnded={() => setVideoEnded(true)}
@@ -283,6 +280,7 @@ export default function StoryButton() {
         onClick={() => {
           resetVideo();
           setDuration(null);
+          setVideoStarted(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
           setOpen(true);
         }}
         aria-haspopup="dialog"
