@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">VOYA image placeholder</title>
+  <desc id="description">A stylized mountain landscape in the VOYA ivory, ink and gold palette.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efeae0"/>
+      <stop offset="1" stop-color="#d8c7a1"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c3a57"/>
+      <stop offset="1" stop-color="#0f1115"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1225" cy="245" r="92" fill="#c9a86a" opacity=".86"/>
+  <path d="M0 830 410 390 690 710 925 455 1600 870v130H0Z" fill="url(#mountain)"/>
+  <path d="m410 390 112 178-87-37-92 69Z" fill="#f7f4ee" opacity=".78"/>
+  <path d="m925 455 141 180-119-45-102 59Z" fill="#f7f4ee" opacity=".68"/>
+  <path d="M0 856c265-86 505-67 720 5 236 79 480 68 880-44v183H0Z" fill="#7c8b7a" opacity=".62"/>
+  <g fill="#f7f4ee" opacity=".9">
+    <path d="M709 821h182v2H709z"/>
+    <path d="M796 735h8v174h-8z"/>
+  </g>
+  <text x="800" y="944" fill="#f7f4ee" font-family="Georgia,serif" font-size="32" letter-spacing="14" text-anchor="middle">VOYA</text>
+</svg>

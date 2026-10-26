@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, CalendarDays, Users, Compass, Search, Minus, Plus, ChevronDown } from 'lucide-react';
+import {
+  MapPin,
+  CalendarDays,
+  Users,
+  Compass,
+  Search,
+  Minus,
+  Plus,
+  ChevronDown,
+} from 'lucide-react';
 import { experienceTypes, searchDestinationOptions } from '@/data/homepageData';
 import { useRouter } from 'next/navigation';
 
@@ -53,7 +62,11 @@ export default function HeroSearchBar() {
   };
 
   const datesLabel =
-    startDay && endDay ? `Nov ${startDay} – Nov ${endDay}` : startDay ? `Nov ${startDay} – …` : 'Add dates';
+    startDay && endDay
+      ? `Nov ${startDay} – Nov ${endDay}`
+      : startDay
+        ? `Nov ${startDay} – …`
+        : 'Add dates';
   const travelersLabel = `${adults + children} traveler${adults + children === 1 ? '' : 's'}`;
 
   const handleSearch = (e: React.FormEvent) => {
@@ -77,11 +90,15 @@ export default function HeroSearchBar() {
         className="grid grid-cols-1 gap-1 rounded-3xl border border-border bg-card p-2 shadow-[0_24px_60px_-20px_rgba(15,17,21,0.45)] md:grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_1.1fr_auto] lg:items-center"
       >
         <div className="relative">
-          <label htmlFor="hero-destination" className="sr-only">Destination</label>
+          <label htmlFor="hero-destination" className="sr-only">
+            Destination
+          </label>
           <div className={`${fieldBase} ${open === 'destination' ? 'bg-muted' : ''}`}>
             <MapPin size={19} className="shrink-0 text-primary" />
             <div className="min-w-0 flex-1">
-              <span className="eyebrow block text-[0.65rem] text-muted-foreground">Destination</span>
+              <span className="eyebrow block text-[0.65rem] text-muted-foreground">
+                Destination
+              </span>
               <input
                 id="hero-destination"
                 value={destination}
@@ -97,7 +114,7 @@ export default function HeroSearchBar() {
             </div>
           </div>
           {open === 'destination' && (
-            <ul className="absolute left-0 top-full z-30 mt-2 w-full min-w-[16rem] animate-fade-up overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-xl">
+            <ul className="absolute left-0 top-full z-30 mt-2 w-[min(100%,calc(100vw-2rem))] min-w-0 animate-fade-up overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-xl sm:min-w-[16rem]">
               {filtered.length === 0 && (
                 <li className="px-4 py-3 text-sm text-muted-foreground">
                   No destinations match “{destination}”. Ask a concierge about it.
@@ -133,11 +150,13 @@ export default function HeroSearchBar() {
             <CalendarDays size={19} className="shrink-0 text-primary" />
             <span className="min-w-0 flex-1">
               <span className="eyebrow block text-[0.65rem] text-muted-foreground">Dates</span>
-              <span className="block truncate text-sm font-semibold text-foreground tabular">{datesLabel}</span>
+              <span className="block truncate text-sm font-semibold text-foreground tabular">
+                {datesLabel}
+              </span>
             </span>
           </button>
           {open === 'dates' && (
-            <div className="absolute left-0 top-full z-30 mt-2 w-[19rem] animate-fade-up rounded-2xl border border-border bg-card p-5 shadow-xl">
+            <div className="absolute left-0 top-full z-30 mt-2 w-[min(19rem,calc(100vw-2rem))] animate-fade-up rounded-2xl border border-border bg-card p-4 shadow-xl sm:p-5">
               <div className="mb-4 flex items-center justify-between">
                 <p className="font-display text-xl font-semibold text-foreground">November 2026</p>
                 <p className="text-xs text-muted-foreground">Select check-in, then check-out</p>
@@ -146,7 +165,8 @@ export default function HeroSearchBar() {
                 {monthDays.map((day) => {
                   const isStart = day === startDay;
                   const isEnd = day === endDay;
-                  const inRange = startDay !== null && endDay !== null && day > startDay && day < endDay;
+                  const inRange =
+                    startDay !== null && endDay !== null && day > startDay && day < endDay;
                   return (
                     <button
                       key={`day-${day}`}
@@ -157,8 +177,8 @@ export default function HeroSearchBar() {
                         isStart || isEnd
                           ? 'bg-primary font-bold text-primary-foreground'
                           : inRange
-                          ? 'bg-primary/20 text-foreground'
-                          : 'text-foreground hover:bg-muted'
+                            ? 'bg-primary/20 text-foreground'
+                            : 'text-foreground hover:bg-muted'
                       }`}
                     >
                       {day}
@@ -191,16 +211,35 @@ export default function HeroSearchBar() {
             <Users size={19} className="shrink-0 text-primary" />
             <span className="min-w-0 flex-1">
               <span className="eyebrow block text-[0.65rem] text-muted-foreground">Travelers</span>
-              <span className="block truncate text-sm font-semibold text-foreground">{travelersLabel}</span>
+              <span className="block truncate text-sm font-semibold text-foreground">
+                {travelersLabel}
+              </span>
             </span>
           </button>
           {open === 'travelers' && (
-            <div className="absolute left-0 top-full z-30 mt-2 w-72 animate-fade-up rounded-2xl border border-border bg-card p-5 shadow-xl">
+            <div className="absolute left-0 top-full z-30 mt-2 w-[min(18rem,calc(100vw-2rem))] animate-fade-up rounded-2xl border border-border bg-card p-4 shadow-xl sm:p-5">
               {[
-                { id: 'adults', label: 'Adults', hint: 'Ages 13+', value: adults, set: setAdults, min: 1 },
-                { id: 'children', label: 'Children', hint: 'Ages 0–12', value: children, set: setChildren, min: 0 },
+                {
+                  id: 'adults',
+                  label: 'Adults',
+                  hint: 'Ages 13+',
+                  value: adults,
+                  set: setAdults,
+                  min: 1,
+                },
+                {
+                  id: 'children',
+                  label: 'Children',
+                  hint: 'Ages 0–12',
+                  value: children,
+                  set: setChildren,
+                  min: 0,
+                },
               ].map((row) => (
-                <div key={`travelers-${row.id}`} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                <div
+                  key={`travelers-${row.id}`}
+                  className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
+                >
                   <div>
                     <p className="text-sm font-semibold text-foreground">{row.label}</p>
                     <p className="text-xs text-muted-foreground">{row.hint}</p>
@@ -243,7 +282,9 @@ export default function HeroSearchBar() {
             <Compass size={19} className="shrink-0 text-primary" />
             <span className="min-w-0 flex-1">
               <span className="eyebrow block text-[0.65rem] text-muted-foreground">Experience</span>
-              <span className="block truncate text-sm font-semibold text-foreground">{experience}</span>
+              <span className="block truncate text-sm font-semibold text-foreground">
+                {experience}
+              </span>
             </span>
             <ChevronDown
               size={16}
@@ -255,7 +296,7 @@ export default function HeroSearchBar() {
           {open === 'experience' && (
             <ul
               role="listbox"
-              className="absolute right-0 top-full z-30 mt-2 w-64 animate-fade-up overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-xl"
+              className="absolute left-0 top-full z-30 mt-2 w-[min(16rem,calc(100vw-2rem))] animate-fade-up overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-xl lg:left-auto lg:right-0"
             >
               {experienceTypes.map((type) => (
                 <li key={`exp-opt-${type}`} role="option" aria-selected={type === experience}>
@@ -283,7 +324,10 @@ export default function HeroSearchBar() {
           className="mt-1 flex h-14 items-center justify-center gap-2 rounded-2xl bg-ink px-8 text-sm font-semibold text-ink-foreground transition-all duration-200 hover:bg-primary hover:text-primary-foreground active:scale-95 disabled:cursor-wait disabled:opacity-80 md:col-span-2 lg:col-span-1 lg:mt-0 lg:min-w-[10.5rem]"
         >
           {searching ? (
-            <span className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-label="Searching" />
+            <span
+              className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent"
+              aria-label="Searching"
+            />
           ) : (
             <>
               <Search size={17} />
@@ -292,7 +336,6 @@ export default function HeroSearchBar() {
           )}
         </button>
       </form>
-
     </div>
   );
 }

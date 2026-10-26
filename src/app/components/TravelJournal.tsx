@@ -17,7 +17,10 @@ export default function TravelJournal() {
               <span className="h-px w-10 bg-primary" />
               The VOYA journal
             </p>
-            <h2 id="journal-heading" className="font-display text-display-lg font-medium text-foreground">
+            <h2
+              id="journal-heading"
+              className="font-display text-display-lg font-medium text-foreground"
+            >
               Stories, guides and <span className="italic text-primary">quiet inspiration</span>
             </h2>
           </div>
@@ -49,7 +52,9 @@ export default function TravelJournal() {
                 <h3 className="font-display text-3xl font-medium leading-tight text-foreground transition-colors group-hover:text-primary md:text-4xl">
                   {lead?.title}
                 </h3>
-                <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">{lead?.excerpt}</p>
+                <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
+                  {lead?.excerpt}
+                </p>
                 <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                   <span className="font-semibold text-foreground">{lead?.author}</span>
                   <span aria-hidden="true">·</span>
@@ -67,7 +72,10 @@ export default function TravelJournal() {
           <div className="flex flex-col gap-8">
             {rest?.map((a) => (
               <article key={a?.id} className="group">
-                <Link href={`/journal/${a?.id?.replace('article-', '')}`} className="grid grid-cols-[9rem_1fr] gap-5 sm:grid-cols-[12rem_1fr]">
+                <Link
+                  href={`/journal/${a?.id?.replace('article-', '')}`}
+                  className="grid grid-cols-[7rem_1fr] gap-4 sm:grid-cols-[12rem_1fr] sm:gap-5"
+                >
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
                     <AppImage
                       src={a?.image}
@@ -79,7 +87,7 @@ export default function TravelJournal() {
                   </div>
                   <div className="flex flex-col justify-center py-1">
                     <p className="eyebrow text-primary">{a?.category}</p>
-                    <h3 className="mt-3 font-display text-2xl font-medium leading-snug text-foreground transition-colors group-hover:text-primary">
+                    <h3 className="mt-3 font-display text-xl font-medium leading-snug text-foreground transition-colors group-hover:text-primary sm:text-2xl">
                       {a?.title}
                     </h3>
                     <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">

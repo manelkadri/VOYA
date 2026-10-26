@@ -1,32 +1,554 @@
 'use client';
 
-import React, { useMemo, useState } from 'react'; import { ArrowLeft, ArrowRight, Check, CircleAlert, Mail, RotateCcw } from 'lucide-react'; import ScrollReveal from '@/components/ScrollReveal';
-type FormData = { destination: string; region: string; flexibleDestination: boolean; departure: string; returnDate: string; flexibleDates: boolean; adults: string; children: string; tripType: string; preferences: string[]; budget: string; accommodation: string; requests: string; name: string; email: string; phone: string; notes: string; };
-const empty: FormData = { destination: '', region: '', flexibleDestination: false, departure: '', returnDate: '', flexibleDates: false, adults: '2', children: '0', tripType: '', preferences: [], budget: '', accommodation: '', requests: '', name: '', email: '', phone: '', notes: '' };
+import React, { useMemo, useState } from 'react';
+import { ArrowLeft, ArrowRight, Check, CircleAlert, Mail, RotateCcw } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
+type FormData = {
+  destination: string;
+  region: string;
+  flexibleDestination: boolean;
+  departure: string;
+  returnDate: string;
+  flexibleDates: boolean;
+  adults: string;
+  children: string;
+  tripType: string;
+  preferences: string[];
+  budget: string;
+  accommodation: string;
+  requests: string;
+  name: string;
+  email: string;
+  phone: string;
+  notes: string;
+};
+const empty: FormData = {
+  destination: '',
+  region: '',
+  flexibleDestination: false,
+  departure: '',
+  returnDate: '',
+  flexibleDates: false,
+  adults: '2',
+  children: '0',
+  tripType: '',
+  preferences: [],
+  budget: '',
+  accommodation: '',
+  requests: '',
+  name: '',
+  email: '',
+  phone: '',
+  notes: '',
+};
 const labels = ['Destination', 'Dates', 'Travelers', 'Preferences', 'Budget', 'Contact', 'Review'];
-const preferences = ['Beach & Relaxation', 'Culture & Heritage', 'Nature & Adventure', 'Wellness', 'Gastronomy', 'Romantic Escapes', 'Exclusive Experiences'];
+const preferences = [
+  'Beach & Relaxation',
+  'Culture & Heritage',
+  'Nature & Adventure',
+  'Wellness',
+  'Gastronomy',
+  'Romantic Escapes',
+  'Exclusive Experiences',
+];
 export default function ConciergePlanner() {
-  const [step, setStep] = useState(0); const [form, setForm] = useState<FormData>(empty); const [error, setError] = useState(''); const [prepared, setPrepared] = useState(false);
-  const set = <K extends keyof FormData>(key: K, value: FormData[K]) => setForm((f) => ({ ...f, [key]: value }));
-  const validate = () => { if (step === 0 && !form.flexibleDestination && !form.destination.trim() && !form.region) return 'Tell us a destination or select that you are flexible.'; if (step === 1 && !form.flexibleDates && (!form.departure || !form.returnDate)) return 'Add your travel dates or select flexible dates.'; if (step === 1 && form.departure && form.returnDate && form.returnDate <= form.departure) return 'Return date must be after departure.'; if (step === 2 && !form.tripType) return 'Choose the type of trip you are planning.'; if (step === 3 && form.preferences.length === 0) return 'Choose at least one travel preference.'; if (step === 4 && (!form.budget || !form.accommodation)) return 'Select a budget and accommodation preference.'; if (step === 5 && (!form.name.trim() || !/^\S+@\S+\.\S+$/.test(form.email))) return 'Enter your name and a valid email address.'; return ''; };
-  const next = () => { const message = validate(); if (message) { setError(message); return; } setError(''); setStep((s) => Math.min(s + 1, 6)); };
-  const toggle = (value: string) => set('preferences', form.preferences.includes(value) ? form.preferences.filter((p) => p !== value) : [...form.preferences, value]);
-  const summary = useMemo(() => `VOYA journey brief\n\nDestination: ${form.flexibleDestination ? 'Flexible' : form.destination || form.region}\nDates: ${form.flexibleDates ? 'Flexible' : `${form.departure} to ${form.returnDate}`}\nTravelers: ${form.adults} adults, ${form.children} children\nTrip: ${form.tripType}\nPreferences: ${form.preferences.join(', ')}\nBudget: ${form.budget}\nStay: ${form.accommodation}\nRequests: ${form.requests || 'None'}\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || 'Not provided'}\nNotes: ${form.notes || 'None'}`, [form]);
-  const prepare = () => { try { localStorage.setItem('voya-journey-brief', JSON.stringify({ ...form, savedAt: new Date().toISOString() })); setPrepared(true); setError(''); } catch { setError('We could not save this brief in your browser. You can still send it by email.'); } };
-  return <section id="planner" className="py-24 md:py-32"><div className="mx-auto max-w-5xl px-6"><ScrollReveal className="text-center"><p className="eyebrow text-primary">Your private journey planner</p><h2 className="mt-5 font-display text-display-lg">Tell us what you’re <span className="italic text-primary">imagining</span></h2><p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">Take a few minutes to shape a brief for your VOYA travel designer.</p></ScrollReveal>
-    <div className="mt-12 overflow-hidden rounded-[2rem] border border-border bg-card shadow-[0_24px_80px_rgba(15,17,21,.08)]"><div className="border-b border-border px-6 py-6 md:px-10"><div className="mb-3 flex justify-between text-xs font-semibold"><span>Step {Math.min(step + 1, 7)} of 7</span><span className="text-muted-foreground">{labels[step]}</span></div><div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${((step + 1) / 7) * 100}%` }} /></div><div className="mt-4 hidden justify-between md:flex">{labels.map((label, i) => <button key={label} type="button" disabled={i > step} onClick={() => i <= step && setStep(i)} className={`text-[.65rem] font-semibold uppercase tracking-wider ${i === step ? 'text-primary' : i < step ? 'text-foreground' : 'text-muted-foreground/50'}`}>{label}</button>)}</div></div>
-      <div className="min-h-[28rem] p-6 md:p-10"><div key={step} className="animate-fade-up">{step === 0 && <Step title="Where could the journey take you?" text="Name a place, choose a region, or leave the map open."><Field label="Desired destination"><input value={form.destination} onChange={(e) => set('destination', e.target.value)} placeholder="e.g. Kyoto, the Cyclades, Patagonia" className="input" /></Field><Field label="Preferred region"><select value={form.region} onChange={(e) => set('region', e.target.value)} className="input"><option value="">Select a region</option>{['Europe','Asia','Africa','Indian Ocean','Middle East','The Americas','Polar Regions'].map((x) => <option key={x}>{x}</option>)}</select></Field><CheckField checked={form.flexibleDestination} onChange={(v) => set('flexibleDestination', v)} label="I am flexible and would love your recommendations" /></Step>}
-      {step === 1 && <Step title="When would you like to travel?" text="Exact dates are useful, but a general season is a perfect start."><div className="grid gap-5 md:grid-cols-2"><Field label="Departure"><input type="date" value={form.departure} onChange={(e) => set('departure', e.target.value)} className="input" /></Field><Field label="Return"><input type="date" min={form.departure} value={form.returnDate} onChange={(e) => set('returnDate', e.target.value)} className="input" /></Field></div><CheckField checked={form.flexibleDates} onChange={(v) => set('flexibleDates', v)} label="My dates are flexible" /></Step>}
-      {step === 2 && <Step title="Who is traveling?" text="This helps us shape the pace, spaces and experiences."><div className="grid gap-5 md:grid-cols-2"><Field label="Adults"><select value={form.adults} onChange={(e) => set('adults', e.target.value)} className="input">{[1,2,3,4,5,6,7,8].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Children"><select value={form.children} onChange={(e) => set('children', e.target.value)} className="input">{[0,1,2,3,4,5,6].map((x) => <option key={x}>{x}</option>)}</select></Field></div><Field label="Type of trip"><select value={form.tripType} onChange={(e) => set('tripType', e.target.value)} className="input"><option value="">Choose one</option>{['Couple’s escape','Family journey','Friends traveling together','Solo journey','Celebration','Honeymoon','Multi-generational journey'].map((x) => <option key={x}>{x}</option>)}</select></Field></Step>}
-      {step === 3 && <Step title="What should the journey feel like?" text="Choose everything that speaks to you."><div className="grid gap-3 sm:grid-cols-2">{preferences.map((p) => <button type="button" key={p} onClick={() => toggle(p)} className={`flex items-center justify-between rounded-2xl border p-4 text-left text-sm transition ${form.preferences.includes(p) ? 'border-primary bg-primary/10' : 'border-border hover:border-primary'}`}>{p}{form.preferences.includes(p) && <Check size={17} className="text-primary" />}</button>)}</div></Step>}
-      {step === 4 && <Step title="A few practical preferences" text="An honest range helps us make the right recommendations from the start."><Field label="Preferred total budget"><select value={form.budget} onChange={(e) => set('budget', e.target.value)} className="input"><option value="">Select a range</option>{['$5,000–$10,000','$10,000–$20,000','$20,000–$40,000','$40,000+','I would like guidance'].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Accommodation preference"><select value={form.accommodation} onChange={(e) => set('accommodation', e.target.value)} className="input"><option value="">Choose one</option>{['Luxury hotels','Private villas','Boutique properties','Resorts','A thoughtful mix'].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Additional requests"><textarea value={form.requests} onChange={(e) => set('requests', e.target.value)} rows={3} placeholder="Accessibility, dietary needs, special occasions…" className="input resize-none" /></Field></Step>}
-      {step === 5 && <Step title="How may we reach you?" text="Your details remain private and are used only for this journey brief."><div className="grid gap-5 md:grid-cols-2"><Field label="Full name"><input value={form.name} onChange={(e) => set('name', e.target.value)} autoComplete="name" className="input" /></Field><Field label="Email"><input type="email" value={form.email} onChange={(e) => set('email', e.target.value)} autoComplete="email" className="input" /></Field></div><Field label="Phone (optional)"><input type="tel" value={form.phone} onChange={(e) => set('phone', e.target.value)} autoComplete="tel" className="input" /></Field><Field label="Anything else we should know?"><textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} rows={3} className="input resize-none" /></Field></Step>}
-      {step === 6 && !prepared && <Step title="Your journey, at a glance" text="Review the brief before preparing it for your concierge."><dl className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">{[['Destination', form.flexibleDestination ? 'Open to ideas' : form.destination || form.region], ['Dates', form.flexibleDates ? 'Flexible' : `${form.departure} – ${form.returnDate}`], ['Travelers', `${form.adults} adults · ${form.children} children`], ['Trip type', form.tripType], ['Interests', form.preferences.join(', ')], ['Budget', form.budget], ['Accommodation', form.accommodation], ['Contact', `${form.name} · ${form.email}`]].map(([label, value]) => <div key={label} className="bg-background p-5"><dt className="eyebrow text-muted-foreground">{label}</dt><dd className="mt-2 text-sm leading-relaxed">{value}</dd></div>)}</dl><p className="mt-5 text-xs leading-relaxed text-muted-foreground">No backend delivery is connected to this demo. “Prepare brief” saves it only in this browser, then lets you open a pre-filled email to VOYA.</p></Step>}
-      {step === 6 && prepared && <div className="flex min-h-[24rem] flex-col items-center justify-center text-center"><span className="flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground"><Check size={28} /></span><h3 className="mt-6 font-display text-4xl">Your brief is ready.</h3><p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">It has been saved in this browser, but has not been sent. Use the button below to open a pre-filled email to our concierge.</p><a href={`mailto:concierge@voya.travel?subject=${encodeURIComponent(`Journey inquiry from ${form.name}`)}&body=${encodeURIComponent(summary)}`} className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-semibold"><Mail size={16} />Email my journey brief</a><button type="button" onClick={() => { setForm(empty); setStep(0); setPrepared(false); }} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground"><RotateCcw size={14} />Start another brief</button></div>}
-      {error && <p role="alert" className="mt-6 flex items-center gap-2 rounded-xl bg-destructive/10 p-4 text-sm text-destructive"><CircleAlert size={17} />{error}</p>}</div></div>
-      {!(step === 6 && prepared) && <div className="flex items-center justify-between border-t border-border px-6 py-5 md:px-10"><button type="button" disabled={step === 0} onClick={() => { setError(''); setStep((s) => Math.max(0, s - 1)); }} className="inline-flex items-center gap-2 text-sm font-semibold disabled:opacity-30"><ArrowLeft size={16} />Previous</button>{step < 6 ? <button type="button" onClick={next} className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white">Continue<ArrowRight size={16} /></button> : <button type="button" onClick={prepare} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold">Prepare brief<Check size={16} /></button>}</div>}
-    </div></div></section>;
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState<FormData>(empty);
+  const [error, setError] = useState('');
+  const [prepared, setPrepared] = useState(false);
+  const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
+    setForm((f) => ({ ...f, [key]: value }));
+  const validate = () => {
+    if (step === 0 && !form.flexibleDestination && !form.destination.trim() && !form.region)
+      return 'Tell us a destination or select that you are flexible.';
+    if (step === 1 && !form.flexibleDates && (!form.departure || !form.returnDate))
+      return 'Add your travel dates or select flexible dates.';
+    if (step === 1 && form.departure && form.returnDate && form.returnDate <= form.departure)
+      return 'Return date must be after departure.';
+    if (step === 2 && !form.tripType) return 'Choose the type of trip you are planning.';
+    if (step === 3 && form.preferences.length === 0)
+      return 'Choose at least one travel preference.';
+    if (step === 4 && (!form.budget || !form.accommodation))
+      return 'Select a budget and accommodation preference.';
+    if (step === 5 && (!form.name.trim() || !/^\S+@\S+\.\S+$/.test(form.email)))
+      return 'Enter your name and a valid email address.';
+    return '';
+  };
+  const next = () => {
+    const message = validate();
+    if (message) {
+      setError(message);
+      return;
+    }
+    setError('');
+    setStep((s) => Math.min(s + 1, 6));
+  };
+  const toggle = (value: string) =>
+    set(
+      'preferences',
+      form.preferences.includes(value)
+        ? form.preferences.filter((p) => p !== value)
+        : [...form.preferences, value]
+    );
+  const summary = useMemo(
+    () =>
+      `VOYA journey brief\n\nDestination: ${form.flexibleDestination ? 'Flexible' : form.destination || form.region}\nDates: ${form.flexibleDates ? 'Flexible' : `${form.departure} to ${form.returnDate}`}\nTravelers: ${form.adults} adults, ${form.children} children\nTrip: ${form.tripType}\nPreferences: ${form.preferences.join(', ')}\nBudget: ${form.budget}\nStay: ${form.accommodation}\nRequests: ${form.requests || 'None'}\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || 'Not provided'}\nNotes: ${form.notes || 'None'}`,
+    [form]
+  );
+  const prepare = () => {
+    try {
+      localStorage.setItem(
+        'voya-journey-brief',
+        JSON.stringify({ ...form, savedAt: new Date().toISOString() })
+      );
+      setPrepared(true);
+      setError('');
+    } catch {
+      setError('We could not save this brief in your browser. You can still send it by email.');
+    }
+  };
+  return (
+    <section id="planner" className="py-24 md:py-32">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <ScrollReveal className="text-center">
+          <p className="eyebrow text-primary">Your private journey planner</p>
+          <h2 className="mt-5 font-display text-display-lg">
+            Tell us what you’re <span className="italic text-primary">imagining</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
+            Take a few minutes to shape a brief for your VOYA travel designer.
+          </p>
+        </ScrollReveal>
+        <div className="mt-12 overflow-hidden rounded-[2rem] border border-border bg-card shadow-[0_24px_80px_rgba(15,17,21,.08)]">
+          <div className="border-b border-border px-6 py-6 md:px-10">
+            <div className="mb-3 flex justify-between text-xs font-semibold">
+              <span>Step {Math.min(step + 1, 7)} of 7</span>
+              <span className="text-muted-foreground">{labels[step]}</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${((step + 1) / 7) * 100}%` }}
+              />
+            </div>
+            <div className="mt-4 hidden justify-between md:flex">
+              {labels.map((label, i) => (
+                <button
+                  key={label}
+                  type="button"
+                  disabled={i > step}
+                  onClick={() => i <= step && setStep(i)}
+                  className={`text-[.65rem] font-semibold uppercase tracking-wider ${i === step ? 'text-primary' : i < step ? 'text-foreground' : 'text-muted-foreground/50'}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="min-h-[28rem] p-4 sm:p-6 md:p-10">
+            <div key={step} className="animate-fade-up">
+              {step === 0 && (
+                <Step
+                  title="Where could the journey take you?"
+                  text="Name a place, choose a region, or leave the map open."
+                >
+                  <Field label="Desired destination">
+                    <input
+                      value={form.destination}
+                      onChange={(e) => set('destination', e.target.value)}
+                      placeholder="e.g. Kyoto, the Cyclades, Patagonia"
+                      className="input"
+                    />
+                  </Field>
+                  <Field label="Preferred region">
+                    <select
+                      value={form.region}
+                      onChange={(e) => set('region', e.target.value)}
+                      className="input"
+                    >
+                      <option value="">Select a region</option>
+                      {[
+                        'Europe',
+                        'Asia',
+                        'Africa',
+                        'Indian Ocean',
+                        'Middle East',
+                        'The Americas',
+                        'Polar Regions',
+                      ].map((x) => (
+                        <option key={x}>{x}</option>
+                      ))}
+                    </select>
+                  </Field>
+                  <CheckField
+                    checked={form.flexibleDestination}
+                    onChange={(v) => set('flexibleDestination', v)}
+                    label="I am flexible and would love your recommendations"
+                  />
+                </Step>
+              )}
+              {step === 1 && (
+                <Step
+                  title="When would you like to travel?"
+                  text="Exact dates are useful, but a general season is a perfect start."
+                >
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <Field label="Departure">
+                      <input
+                        type="date"
+                        value={form.departure}
+                        onChange={(e) => set('departure', e.target.value)}
+                        className="input"
+                      />
+                    </Field>
+                    <Field label="Return">
+                      <input
+                        type="date"
+                        min={form.departure}
+                        value={form.returnDate}
+                        onChange={(e) => set('returnDate', e.target.value)}
+                        className="input"
+                      />
+                    </Field>
+                  </div>
+                  <CheckField
+                    checked={form.flexibleDates}
+                    onChange={(v) => set('flexibleDates', v)}
+                    label="My dates are flexible"
+                  />
+                </Step>
+              )}
+              {step === 2 && (
+                <Step
+                  title="Who is traveling?"
+                  text="This helps us shape the pace, spaces and experiences."
+                >
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <Field label="Adults">
+                      <select
+                        value={form.adults}
+                        onChange={(e) => set('adults', e.target.value)}
+                        className="input"
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
+                          <option key={x}>{x}</option>
+                        ))}
+                      </select>
+                    </Field>
+                    <Field label="Children">
+                      <select
+                        value={form.children}
+                        onChange={(e) => set('children', e.target.value)}
+                        className="input"
+                      >
+                        {[0, 1, 2, 3, 4, 5, 6].map((x) => (
+                          <option key={x}>{x}</option>
+                        ))}
+                      </select>
+                    </Field>
+                  </div>
+                  <Field label="Type of trip">
+                    <select
+                      value={form.tripType}
+                      onChange={(e) => set('tripType', e.target.value)}
+                      className="input"
+                    >
+                      <option value="">Choose one</option>
+                      {[
+                        'Couple’s escape',
+                        'Family journey',
+                        'Friends traveling together',
+                        'Solo journey',
+                        'Celebration',
+                        'Honeymoon',
+                        'Multi-generational journey',
+                      ].map((x) => (
+                        <option key={x}>{x}</option>
+                      ))}
+                    </select>
+                  </Field>
+                </Step>
+              )}
+              {step === 3 && (
+                <Step
+                  title="What should the journey feel like?"
+                  text="Choose everything that speaks to you."
+                >
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {preferences.map((p) => (
+                      <button
+                        type="button"
+                        key={p}
+                        onClick={() => toggle(p)}
+                        className={`flex items-center justify-between rounded-2xl border p-4 text-left text-sm transition ${form.preferences.includes(p) ? 'border-primary bg-primary/10' : 'border-border hover:border-primary'}`}
+                      >
+                        {p}
+                        {form.preferences.includes(p) && (
+                          <Check size={17} className="text-primary" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </Step>
+              )}
+              {step === 4 && (
+                <Step
+                  title="A few practical preferences"
+                  text="An honest range helps us make the right recommendations from the start."
+                >
+                  <Field label="Preferred total budget">
+                    <select
+                      value={form.budget}
+                      onChange={(e) => set('budget', e.target.value)}
+                      className="input"
+                    >
+                      <option value="">Select a range</option>
+                      {[
+                        '$5,000–$10,000',
+                        '$10,000–$20,000',
+                        '$20,000–$40,000',
+                        '$40,000+',
+                        'I would like guidance',
+                      ].map((x) => (
+                        <option key={x}>{x}</option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Accommodation preference">
+                    <select
+                      value={form.accommodation}
+                      onChange={(e) => set('accommodation', e.target.value)}
+                      className="input"
+                    >
+                      <option value="">Choose one</option>
+                      {[
+                        'Luxury hotels',
+                        'Private villas',
+                        'Boutique properties',
+                        'Resorts',
+                        'A thoughtful mix',
+                      ].map((x) => (
+                        <option key={x}>{x}</option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Additional requests">
+                    <textarea
+                      value={form.requests}
+                      onChange={(e) => set('requests', e.target.value)}
+                      rows={3}
+                      placeholder="Accessibility, dietary needs, special occasions…"
+                      className="input resize-none"
+                    />
+                  </Field>
+                </Step>
+              )}
+              {step === 5 && (
+                <Step
+                  title="How may we reach you?"
+                  text="Your details remain private and are used only for this journey brief."
+                >
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <Field label="Full name">
+                      <input
+                        value={form.name}
+                        onChange={(e) => set('name', e.target.value)}
+                        autoComplete="name"
+                        className="input"
+                      />
+                    </Field>
+                    <Field label="Email">
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => set('email', e.target.value)}
+                        autoComplete="email"
+                        className="input"
+                      />
+                    </Field>
+                  </div>
+                  <Field label="Phone (optional)">
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => set('phone', e.target.value)}
+                      autoComplete="tel"
+                      className="input"
+                    />
+                  </Field>
+                  <Field label="Anything else we should know?">
+                    <textarea
+                      value={form.notes}
+                      onChange={(e) => set('notes', e.target.value)}
+                      rows={3}
+                      className="input resize-none"
+                    />
+                  </Field>
+                </Step>
+              )}
+              {step === 6 && !prepared && (
+                <Step
+                  title="Your journey, at a glance"
+                  text="Review the brief before preparing it for your concierge."
+                >
+                  <dl className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">
+                    {[
+                      [
+                        'Destination',
+                        form.flexibleDestination
+                          ? 'Open to ideas'
+                          : form.destination || form.region,
+                      ],
+                      [
+                        'Dates',
+                        form.flexibleDates ? 'Flexible' : `${form.departure} – ${form.returnDate}`,
+                      ],
+                      ['Travelers', `${form.adults} adults · ${form.children} children`],
+                      ['Trip type', form.tripType],
+                      ['Interests', form.preferences.join(', ')],
+                      ['Budget', form.budget],
+                      ['Accommodation', form.accommodation],
+                      ['Contact', `${form.name} · ${form.email}`],
+                    ].map(([label, value]) => (
+                      <div key={label} className="bg-background p-5">
+                        <dt className="eyebrow text-muted-foreground">{label}</dt>
+                        <dd className="mt-2 break-words text-sm leading-relaxed">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
+                    No backend delivery is connected to this demo. “Prepare brief” saves it only in
+                    this browser, then lets you open a pre-filled email to VOYA.
+                  </p>
+                </Step>
+              )}
+              {step === 6 && prepared && (
+                <div className="flex min-h-[24rem] flex-col items-center justify-center text-center">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground">
+                    <Check size={28} />
+                  </span>
+                  <h3 className="mt-6 font-display text-3xl sm:text-4xl">Your brief is ready.</h3>
+                  <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
+                    It has been saved in this browser, but has not been sent. Use the button below
+                    to open a pre-filled email to our concierge.
+                  </p>
+                  <a
+                    href={`mailto:concierge@voya.travel?subject=${encodeURIComponent(`Journey inquiry from ${form.name}`)}&body=${encodeURIComponent(summary)}`}
+                    className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-semibold"
+                  >
+                    <Mail size={16} />
+                    Email my journey brief
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setForm(empty);
+                      setStep(0);
+                      setPrepared(false);
+                    }}
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground"
+                  >
+                    <RotateCcw size={14} />
+                    Start another brief
+                  </button>
+                </div>
+              )}
+              {error && (
+                <p
+                  role="alert"
+                  className="mt-6 flex items-center gap-2 rounded-xl bg-destructive/10 p-4 text-sm text-destructive"
+                >
+                  <CircleAlert size={17} />
+                  {error}
+                </p>
+              )}
+            </div>
+          </div>
+          {!(step === 6 && prepared) && (
+            <div className="flex items-center justify-between gap-3 border-t border-border px-4 py-5 sm:px-6 md:px-10">
+              <button
+                type="button"
+                disabled={step === 0}
+                onClick={() => {
+                  setError('');
+                  setStep((s) => Math.max(0, s - 1));
+                }}
+                className="inline-flex items-center gap-2 text-sm font-semibold disabled:opacity-30"
+              >
+                <ArrowLeft size={16} />
+                Previous
+              </button>
+              {step < 6 ? (
+                <button
+                  type="button"
+                  onClick={next}
+                  className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white"
+                >
+                  Continue
+                  <ArrowRight size={16} />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={prepare}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold"
+                >
+                  Prepare brief
+                  <Check size={16} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }
-function Step({ title, text, children }: { title: string; text: string; children: React.ReactNode }) { return <div><h3 className="font-display text-4xl">{title}</h3><p className="mt-3 text-muted-foreground">{text}</p><div className="mt-8 space-y-5">{children}</div></div>; }
-function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[.14em] text-muted-foreground">{label}</span>{children}</label>; }
-function CheckField({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) { return <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border p-4"><input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="rounded border-border text-primary focus:ring-primary" /><span className="text-sm">{label}</span></label>; }
+function Step({
+  title,
+  text,
+  children,
+}: {
+  title: string;
+  text: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <h3 className="font-display text-3xl sm:text-4xl">{title}</h3>
+      <p className="mt-3 text-muted-foreground">{text}</p>
+      <div className="mt-8 space-y-5">{children}</div>
+    </div>
+  );
+}
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-[.14em] text-muted-foreground">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+function CheckField({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  label: string;
+}) {
+  return (
+    <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border p-4">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="rounded border-border text-primary focus:ring-primary"
+      />
+      <span className="text-sm">{label}</span>
+    </label>
+  );
+}

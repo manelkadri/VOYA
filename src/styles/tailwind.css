@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --background: #F7F4EE;
+  --background: #f7f4ee;
   --background-rgb: 247 244 238;
   --foreground: #161616;
-  --primary: #C9A86A;
+  --primary: #c9a86a;
   --primary-rgb: 201 168 106;
   --primary-foreground: #161616;
-  --secondary: #D8C7A1;
+  --secondary: #d8c7a1;
   --secondary-foreground: #161616;
-  --accent: #1C3A57;
-  --accent-foreground: #F7F4EE;
-  --muted: #EFEAE0;
-  --muted-foreground: #6E6A64;
-  --card: #FFFFFF;
+  --accent: #1c3a57;
+  --accent-foreground: #f7f4ee;
+  --muted: #efeae0;
+  --muted-foreground: #6e6a64;
+  --card: #ffffff;
   --card-foreground: #161616;
-  --border: #E3DCCB;
-  --input: #D9D0BC;
-  --ring: #C9A86A;
+  --border: #e3dccb;
+  --input: #d9d0bc;
+  --ring: #c9a86a;
   --radius: 1rem;
   --font-sans: var(--font-manrope);
-  --success: #5E7A5C;
-  --success-foreground: #F7F4EE;
-  --warning: #B8862B;
+  --success: #5e7a5c;
+  --success-foreground: #f7f4ee;
+  --warning: #b8862b;
   --warning-foreground: #161616;
-  --destructive: #A64B3C;
-  --destructive-foreground: #F7F4EE;
-  --ink: #0F1115;
+  --destructive: #a64b3c;
+  --destructive-foreground: #f7f4ee;
+  --ink: #0f1115;
   --ink-rgb: 15 17 21;
-  --ink-foreground: #F7F4EE;
+  --ink-foreground: #f7f4ee;
   --ink-foreground-rgb: 247 244 238;
-  --gold: #C9A86A;
+  --gold: #c9a86a;
   --gold-foreground: #161616;
-  --sand: #D8C7A1;
-  --ocean: #1C3A57;
-  --ocean-foreground: #F7F4EE;
-  --sage: #7C8B7A;
+  --sand: #d8c7a1;
+  --ocean: #1c3a57;
+  --ocean-foreground: #f7f4ee;
+  --sage: #7c8b7a;
 }
 
 @layer base {
@@ -50,11 +50,40 @@
     color: var(--foreground);
     font-family: var(--font-sans), sans-serif;
     -webkit-font-smoothing: antialiased;
+    min-width: 280px;
+    overflow-x: clip;
   }
   html {
     scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: clip;
   }
-  h1, h2, h3, h4, h5, h6, p {
+  main,
+  section,
+  header,
+  footer,
+  nav,
+  form {
+    max-width: 100%;
+  }
+  img,
+  video,
+  svg {
+    max-width: 100%;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    min-width: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
     margin: 0;
   }
   :focus-visible {
@@ -72,7 +101,9 @@
     padding: 0.8rem 0.95rem;
     font-size: 0.925rem;
     color: var(--foreground);
-    transition: border-color 200ms ease, box-shadow 200ms ease;
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
   }
   .input:focus {
     border-color: var(--ring);
@@ -83,17 +114,17 @@
 
 @layer utilities {
   .text-hero-xl {
-    font-size: clamp(3.25rem, 9vw, 8.5rem);
+    font-size: clamp(2.85rem, 9vw, 8.5rem);
     line-height: 0.95;
     letter-spacing: -0.02em;
   }
   .text-display-lg {
-    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    font-size: clamp(2.25rem, 5.5vw, 4.75rem);
     line-height: 1;
     letter-spacing: -0.015em;
   }
   .text-display-md {
-    font-size: clamp(2rem, 3.6vw, 3.25rem);
+    font-size: clamp(1.85rem, 3.6vw, 3.25rem);
     line-height: 1.05;
     letter-spacing: -0.01em;
   }
@@ -107,10 +138,20 @@
     font-variant-numeric: tabular-nums;
   }
   .hero-scrim {
-    background-image: linear-gradient(to bottom, rgba(15, 17, 21, 0.55) 0%, rgba(15, 17, 21, 0.15) 38%, rgba(15, 17, 21, 0.78) 100%);
+    background-image: linear-gradient(
+      to bottom,
+      rgba(15, 17, 21, 0.55) 0%,
+      rgba(15, 17, 21, 0.15) 38%,
+      rgba(15, 17, 21, 0.78) 100%
+    );
   }
   .card-scrim {
-    background-image: linear-gradient(to top, rgba(15, 17, 21, 0.88) 0%, rgba(15, 17, 21, 0.25) 55%, rgba(15, 17, 21, 0) 100%);
+    background-image: linear-gradient(
+      to top,
+      rgba(15, 17, 21, 0.88) 0%,
+      rgba(15, 17, 21, 0.25) 55%,
+      rgba(15, 17, 21, 0) 100%
+    );
   }
   .blob-gold {
     background: radial-gradient(circle, rgba(201, 168, 106, 0.28) 0%, rgba(201, 168, 106, 0) 70%);
@@ -147,9 +188,19 @@
   }
 }
 
+@media (max-width: 374px) {
+  .eyebrow {
+    letter-spacing: 0.16em;
+  }
+}
+
 @keyframes story-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes story-panel-in {
@@ -164,12 +215,19 @@
 }
 
 @keyframes story-play-float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-7px) scale(1.025); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-7px) scale(1.025);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
