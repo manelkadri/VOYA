@@ -9,12 +9,8 @@ import Gallery from '@/components/Gallery';
 import ScrollReveal from '@/components/ScrollReveal';
 import EditorialCta from '@/components/EditorialCta';
 import AppImage from '@/components/ui/AppImage';
-import { destinations, experiences, stays } from '@/data/travelData';
+import { destinationBySlug } from '@/lib/serverCatalog';
 import { ArrowLeft, ArrowUpRight, CalendarDays, Check, Clock3, MapPin, Star } from 'lucide-react';
-
-export function generateStaticParams() {
-  return destinations.map(({ slug }) => ({ slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -22,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const item = destinations.find((destination) => destination.slug === slug);
+  const item = await destinationBySlug(slug);
   return {
     title: item ? `${item.name}, ${item.country} | VOYA` : 'Destination | VOYA',
     description: item?.description,
@@ -35,15 +31,10 @@ export default async function DestinationDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = destinations.find((destination) => destination.slug === slug);
+  const item = await destinationBySlug(slug);
   if (!item) notFound();
-  const nearbyExperiences = experiences
-    .filter(
-      (experience) =>
-        experience.location.includes(item.name) || experience.location.includes(item.country)
-    )
-    .slice(0, 3);
-  const destinationStays = stays.filter((stay) => stay.destination === item.name).slice(0, 2);
+  const nearbyExperiences = item.experiences.slice(0, 3);
+  const destinationStays = item.hotels.slice(0, 2);
 
   return (
     <div className="min-h-screen bg-background text-foreground">

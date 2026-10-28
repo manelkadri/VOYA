@@ -6,7 +6,7 @@ import AppImage from '@/components/ui/AppImage';
 import FavoriteButton from '@/components/FavoriteButton';
 import DemoMap from '@/components/DemoMap';
 import ScrollReveal from '@/components/ScrollReveal';
-import { destinations } from '@/data/travelData';
+import { useDestinations } from '@/hooks/useCatalog';
 import { ArrowUpRight, Grid2X2, Map, Search, SlidersHorizontal, Star, X } from 'lucide-react';
 
 const initial = {
@@ -20,6 +20,7 @@ const initial = {
 type Filters = typeof initial;
 
 export default function DestinationExplorer() {
+  const destinations = useDestinations();
   const [filters, setFilters] = useState<Filters>(initial);
   const [sort, setSort] = useState('popular');
   const [view, setView] = useState<'grid' | 'map'>('grid');
@@ -280,7 +281,11 @@ export default function DestinationExplorer() {
                         />
                         <div className="card-scrim absolute inset-0" />
                         <div className="absolute right-4 top-4">
-                          <FavoriteButton label={item.name} />
+                          <FavoriteButton
+                            label={item.name}
+                            targetId={item.id}
+                            targetType="DESTINATION"
+                          />
                         </div>
                         <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                           <p className="eyebrow text-primary">{item.category}</p>

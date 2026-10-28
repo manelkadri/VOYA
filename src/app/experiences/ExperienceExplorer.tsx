@@ -5,7 +5,7 @@ import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import FavoriteButton from '@/components/FavoriteButton';
 import ScrollReveal from '@/components/ScrollReveal';
-import { experiences } from '@/data/travelData';
+import { useExperiences } from '@/hooks/useCatalog';
 import { ArrowUpRight, Clock3, MapPin, Search } from 'lucide-react';
 
 const categories = [
@@ -21,6 +21,7 @@ const categories = [
 ];
 
 export default function ExperienceExplorer() {
+  const experiences = useExperiences();
   const [category, setCategory] = useState('All Experiences');
   const [query, setQuery] = useState('');
   useEffect(() => {
@@ -102,7 +103,11 @@ export default function ExperienceExplorer() {
                       />
                       <div className="card-scrim absolute inset-0" />
                       <div className="absolute right-4 top-4">
-                        <FavoriteButton label={item.title} />
+                        <FavoriteButton
+                          label={item.title}
+                          targetId={item.id}
+                          targetType="EXPERIENCE"
+                        />
                       </div>
                       <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                         <p className="eyebrow text-primary">{item.category}</p>

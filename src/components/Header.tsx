@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, Menu, X, ArrowUpRight } from 'lucide-react';
+import { Search, Menu, X, ArrowUpRight, CircleUserRound } from 'lucide-react';
 import AppLogo from '@/components/ui/AppLogo';
 import { navLinks } from '@/data/homepageData';
 import { usePathname, useRouter } from 'next/navigation';
@@ -40,7 +40,11 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex h-20 max-w-screen-2xl items-center justify-between px-6 lg:px-10 2xl:px-16">
-          <Link href="/" aria-label="VOYA home" className={`flex items-center gap-2.5 ${textTone} transition-colors duration-300`}>
+          <Link
+            href="/"
+            aria-label="VOYA home"
+            className={`flex items-center gap-2.5 ${textTone} transition-colors duration-300`}
+          >
             <AppLogo size={40} />
             <span className="font-display text-3xl font-semibold tracking-[0.18em] hidden sm:block">
               VOYA
@@ -64,12 +68,21 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/account"
+              aria-label="Your VOYA account"
+              className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ${scrolled ? 'hover:bg-muted text-foreground' : 'hover:bg-ink-foreground/10 text-ink-foreground'}`}
+            >
+              <CircleUserRound size={19} />
+            </Link>
             <button
               type="button"
               aria-label="Search VOYA"
               onClick={() => setSearchOpen((v) => !v)}
               className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 active:scale-95 ${
-                scrolled ? 'hover:bg-muted text-foreground' : 'hover:bg-ink-foreground/10 text-ink-foreground'
+                scrolled
+                  ? 'hover:bg-muted text-foreground'
+                  : 'hover:bg-ink-foreground/10 text-ink-foreground'
               }`}
             >
               <Search size={19} />
@@ -87,7 +100,9 @@ export default function Header() {
               aria-expanded={drawerOpen}
               onClick={() => setDrawerOpen(true)}
               className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 active:scale-95 lg:hidden ${
-                scrolled ? 'hover:bg-muted text-foreground' : 'hover:bg-ink-foreground/10 text-ink-foreground'
+                scrolled
+                  ? 'hover:bg-muted text-foreground'
+                  : 'hover:bg-ink-foreground/10 text-ink-foreground'
               }`}
             >
               <Menu size={22} />
@@ -132,7 +147,12 @@ export default function Header() {
       </header>
 
       {drawerOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label="Main menu">
+        <div
+          className="fixed inset-0 z-[60] lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Main menu"
+        >
           <button
             type="button"
             aria-label="Close menu"
@@ -142,7 +162,9 @@ export default function Header() {
           <div className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm animate-drawer-in flex-col bg-ink text-ink-foreground">
             <div className="flex h-20 items-center justify-between px-6">
               <div className="flex items-center gap-2.5">
-                <Link href="/" onClick={() => setDrawerOpen(false)} aria-label="VOYA home"><AppLogo size={36} /></Link>
+                <Link href="/" onClick={() => setDrawerOpen(false)} aria-label="VOYA home">
+                  <AppLogo size={36} />
+                </Link>
                 <span className="font-display text-2xl font-semibold tracking-[0.18em]">VOYA</span>
               </div>
               <button

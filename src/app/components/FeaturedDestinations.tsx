@@ -1,9 +1,27 @@
+'use client';
+
 import React from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
-import { destinations } from '@/data/homepageData';
+import { useDestinations } from '@/hooks/useCatalog';
 import DestinationCarousel from './DestinationCarousel';
 
 export default function FeaturedDestinations() {
+  const destinations = useDestinations()
+    .slice(0, 4)
+    .map((item) => ({
+      id: `dest-${item.slug}`,
+      name: item.name,
+      country: item.country,
+      category: item.category,
+      image: item.image,
+      alt: `${item.name}, ${item.country}`,
+      rating: item.rating,
+      reviews: 0,
+      nights: item.duration,
+      bestSeason: item.season,
+      peakNow: false,
+      fromPrice: item.price,
+    }));
   return (
     <section className="bg-background py-24 md:py-32" aria-labelledby="destinations-heading">
       <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 2xl:px-16">
@@ -13,8 +31,12 @@ export default function FeaturedDestinations() {
               <span className="h-px w-10 bg-primary" />
               Featured destinations
             </p>
-            <h2 id="destinations-heading" className="font-display text-display-lg font-medium text-foreground">
-              Places that stay with you <span className="italic text-primary">long after</span> you’ve left
+            <h2
+              id="destinations-heading"
+              className="font-display text-display-lg font-medium text-foreground"
+            >
+              Places that stay with you <span className="italic text-primary">long after</span>{' '}
+              you’ve left
             </h2>
           </div>
           <p className="max-w-sm text-base leading-relaxed text-muted-foreground">

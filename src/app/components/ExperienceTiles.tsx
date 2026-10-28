@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { Heart, Leaf, Ship, Landmark, ArrowUpRight } from 'lucide-react';
 import AppImage from '@/components/ui/AppImage';
 import type { ExperienceTile } from '@/data/homepageData';
-import Icon from '@/components/ui/AppIcon';
-
 
 const iconMap = { Heart, Leaf, Ship, Landmark };
 
@@ -21,7 +19,7 @@ export default function ExperienceTiles({ items }: { items: ExperienceTile[] }) 
         return (
           <Link
             key={item.id}
-            href={`/experiences/${({ 'exp-romantic': 'amalfi-for-two', 'exp-wellness': 'bali-wellness', 'exp-yacht': 'aegean-private-yacht', 'exp-culture': 'kyoto-living-craft' } as Record<string, string>)[item.id] || ''}`}
+            href={`/experiences/${item.slug ?? (({ 'exp-romantic': 'amalfi-for-two', 'exp-wellness': 'bali-wellness', 'exp-yacht': 'aegean-private-yacht', 'exp-culture': 'kyoto-living-craft' } as Record<string, string>)[item.id] || '')}`}
             onMouseEnter={() => setActive(item.id)}
             onFocus={() => setActive(item.id)}
             aria-label={`${item.title} — ${item.count}`}
@@ -54,16 +52,22 @@ export default function ExperienceTiles({ items }: { items: ExperienceTile[] }) 
               </div>
 
               <div>
-                <h3 className="font-display text-3xl font-medium leading-tight md:text-4xl">{item.title}</h3>
+                <h3 className="font-display text-3xl font-medium leading-tight md:text-4xl">
+                  {item.title}
+                </h3>
                 <div
                   className={`grid transition-all duration-500 ease-out xl:grid-rows-[0fr] ${
                     isActive ? 'xl:grid-rows-[1fr] xl:opacity-100' : 'xl:opacity-0'
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-foreground/80">{item.blurb}</p>
+                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-foreground/80">
+                      {item.blurb}
+                    </p>
                     <div className="mt-5 flex items-center justify-between border-t border-ink-foreground/20 pt-4">
-                      <span className="tabular font-display text-2xl font-semibold text-primary">{item.from}</span>
+                      <span className="tabular font-display text-2xl font-semibold text-primary">
+                        {item.from}
+                      </span>
                       <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 group-hover:rotate-45">
                         <ArrowUpRight size={18} />
                       </span>

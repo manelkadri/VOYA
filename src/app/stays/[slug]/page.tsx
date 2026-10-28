@@ -7,19 +7,16 @@ import Footer from '@/components/Footer';
 import InteriorHero from '@/components/InteriorHero';
 import Gallery from '@/components/Gallery';
 import ScrollReveal from '@/components/ScrollReveal';
-import { stays } from '@/data/travelData';
+import { hotelBySlug } from '@/lib/serverCatalog';
 import { ArrowLeft, ArrowUpRight, Check, MapPin, Star, Users } from 'lucide-react';
 
-export function generateStaticParams() {
-  return stays.map(({ slug }) => ({ slug }));
-}
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const stay = stays.find((x) => x.slug === slug);
+  const stay = await hotelBySlug(slug);
   return {
     title: stay ? `${stay.name} | VOYA Stays` : 'Stay | VOYA',
     description: stay?.description,
@@ -27,7 +24,7 @@ export async function generateMetadata({
 }
 export default async function StayDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const stay = stays.find((x) => x.slug === slug);
+  const stay = await hotelBySlug(slug);
   if (!stay) notFound();
   return (
     <div className="min-h-screen bg-background text-foreground">

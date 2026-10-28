@@ -7,19 +7,16 @@ import Footer from '@/components/Footer';
 import InteriorHero from '@/components/InteriorHero';
 import Gallery from '@/components/Gallery';
 import ScrollReveal from '@/components/ScrollReveal';
-import { experiences } from '@/data/travelData';
+import { experienceBySlug } from '@/lib/serverCatalog';
 import { ArrowLeft, ArrowUpRight, Check, Clock3, Info, MapPin } from 'lucide-react';
 
-export function generateStaticParams() {
-  return experiences.map(({ slug }) => ({ slug }));
-}
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const item = experiences.find((x) => x.slug === slug);
+  const item = await experienceBySlug(slug);
   return {
     title: item ? `${item.title} | VOYA` : 'Experience | VOYA',
     description: item?.description,
@@ -28,7 +25,7 @@ export async function generateMetadata({
 
 export default async function ExperienceDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = experiences.find((x) => x.slug === slug);
+  const item = await experienceBySlug(slug);
   if (!item) notFound();
   return (
     <div className="min-h-screen bg-background text-foreground">

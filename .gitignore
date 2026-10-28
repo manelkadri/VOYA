@@ -1,9 +1,11 @@
 # Node modules
 node_modules/
 package-lock.json
+!backend/package-lock.json
 
 # Next.js build output
 .next/
+.next-*/
 out/
 
 # Production build

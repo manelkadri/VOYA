@@ -5,7 +5,7 @@ import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import FavoriteButton from '@/components/FavoriteButton';
 import ScrollReveal from '@/components/ScrollReveal';
-import { stays } from '@/data/travelData';
+import { useHotels } from '@/hooks/useCatalog';
 import {
   ArrowUpRight,
   CalendarDays,
@@ -26,6 +26,7 @@ const types = [
   'Overwater Bungalows',
 ];
 export default function StayExplorer() {
+  const stays = useHotels();
   const [query, setQuery] = useState('');
   const [type, setType] = useState('All stays');
   const [price, setPrice] = useState(2500);
@@ -257,7 +258,11 @@ export default function StayExplorer() {
                             className="object-cover transition duration-700 group-hover:scale-105"
                           />
                           <div className="absolute right-4 top-4">
-                            <FavoriteButton label={stay.name} />
+                            <FavoriteButton
+                              label={stay.name}
+                              targetId={stay.id}
+                              targetType="HOTEL"
+                            />
                           </div>
                           <span className="absolute bottom-4 left-4 rounded-full bg-ink/70 px-3 py-1.5 text-[.65rem] font-semibold uppercase tracking-wider text-white backdrop-blur">
                             {stay.type}
